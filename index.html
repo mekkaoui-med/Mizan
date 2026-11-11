@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Mizan</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="logo">GOLD<span>.</span>PRICER</div>
+
+        <div>
+          <p id="responseState"></p>
+        </div>
+        <div id="date"></div>
+      </header>
+      <main>
+        <section>
+          <h2 class="sectionTitle">Prix du Marcher</h2>
+          <div class="prices">
+
+
+
+
+            <article class="price-card">
+              <div class="metal-name">Or · 24 Carars</div>
+              <div class="price">
+                <span id="goldPrice"></span>
+                <span id="currency">MAD / g</span>
+              </div>
+              <div class="goldVariation">
+                <span id="variation-icon-gold">↑</span>
+                <span id="variation-value-gold" class=""></span>
+                par rapport a hier
+              </div>
+              <div id="update">
+                <p>Dernière mise à jour : <span id="last-update"></span></p>
+              </div>
+            </article>
+
+
+
+
+
+
+
+            <article class="price-card">
+              <div class="metal-name">Argent · Pur</div>
+              <div class="price">
+                <span id="argentPrice"></span>
+                <span id="currency">MAD / g</span>
+              </div>
+              <div class="goldVariation">
+                <span id="variation-icon-argent" class="">↓</span>
+                <span class="variation-value-argent">-1,25 %</span>
+                par rapport a hier
+              </div>
+              <div id="update">
+                <p>Dernière mise à jour : <span id="last-update-arg"></span></p>
+              </div>
+            </article>
+            <article>
+                <h2>Estimateur de bijoues:</h2>
+                <div>
+                   
+                </div>
+            </article>
+            <!-- dksakjdjk -->
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: #bcbc58;
+  color: #252525;
+  padding: 30px 20px;
+}
+.container {
+  width: 1000px;
+  margin: 0 auto;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.logo span {
+  font-size: 25px;
+  color: #696903;
+}
+.date {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  color: #4c4343;
+}
+.sectionTitle{
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+.prices{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 18px;
+}
+.price-card{
+  background: rgb(241, 241, 160);
+  border-radius: 5px;
+}
+.metal-name{
+  text-align: center;
+  text-decoration: underline;
+  color: #535050;
+  font-size: 15px;
+  margin-bottom: 15px;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+.price{
+  font-size: 30px;
+  font-weight: bold;
+  margin:5px 10px ;
+
+}
+#currency{
+  font-size: 15px;
+  font-weight: normal;
+}
+
+
+.goldVariation{
+  font-size: 15px;
+  margin-left: 5px;
+  font-weight: 600;
+}
+/* #variation-value-gold{
+  color: green;
+} */
+#variation-icon-gold{
+  font-size: 30px;
+}
+.positive{
+  color: green;
+}
+.negative{
+  color: red;
+}
+
+
+
+
+#variation-icon-argent{
+  font-size: 30px;
+  color: red;
+}
+.variation-value-argent{
+  color: red;
+   
+}
+.hidden{
+  display: none;
+}
+#responseState{
+  color: red;
+}
+
+#refrechRespons{
+  width: 15%;
+  border-radius: 15px;
+  border-color: #bcbc58;
+  background-color: #bcbc58;
+}
+
+#refrechRespons:hover{
+  letter-spacing: 1px;
+}
+#responsePannel{
+  display: flex;
+  justify-content: center;
+}
+#update{
+  margin: 10px;
+}
