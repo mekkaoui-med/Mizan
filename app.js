@@ -4,8 +4,26 @@ const responseState = document.getElementById("responseState");
 const pricesContainer = document.querySelector(".prices");
 const currencySelect = document.getElementById("currency-select");
 
+//us5
+const weightInput = document.getElementById("input-gold-argent");
+const metalSelect = document.getElementById("select-metal");
+const weightError = document.getElementById("weight-error");
+const estimateResult = document.getElementById("estimate-result");
+const estimateCurrency = document.getElementById("estimate-currency");
+
 const GOLD_HISTORY_URL = "https://xaus.com/api/v1/history";
 const SILVER_CHART_URL = "https://xaus.com/api/v1/chart?symbol=silver&range=1y&interval=1d";
+
+let latestPrices = {
+  gold: 0,
+  argent: 0,
+  currency: "MAD",
+};
+
+
+function calculateEstimate(weight, pricePerGram) {
+  return weight * pricePerGram;
+}
 
 
 
@@ -22,27 +40,50 @@ function todayTime() {
 async function getGoldVariationPercent() {
   const response = await fetch(GOLD_HISTORY_URL);
   if (!response.ok) throw new Error("Erreur historique Or");
-
   const data = await response.json();
   const points = data.points;
-
-  const previousPoint = points.at(-2).c;
-  const latestPoint = points.at(-1).c;
-
-  return ((latestPoint - previousPoint) / previousPoint) * 100;
+  return ((points.at(-1).c - points.at(-2).c) / points.at(-2).c) * 100;
 }
 
 async function getSilverVariationPercent() {
   const response = await fetch(SILVER_CHART_URL);
   if (!response.ok) throw new Error("Erreur historique Argent");
-
   const data = await response.json();
   const points = data.points;
+  return ((points.at(-1).c - points.at(-2).c) / points.at(-2).c) * 100;
+}
 
-  const previousPoint = points.at(-2).c;
-  const latestPoint = points.at(-1).c;
 
-  return ((latestPoint - previousPoint) / previousPoint) * 100;
+function updateEstimate() {
+  const rawValue = weightInput.value.trim();
+  const selectedMetal = metalSelect.value;
+  const currentPricePerGram = latestPrices[selectedMetal];
+
+  estimateCurrency.textContent = latestPrices.currency;
+
+  if (rawValue === "") {
+    weightError.textContent = "Veuillez saisir un poids.";
+    estimateResult.textContent = "--";
+    return;
+  }
+
+  const weight = Number(rawValue);
+
+  if (isNaN(weight) || weight <= 0) {
+    weightError.textContent = "Veuillez saisir un poids valide et supérieur à 0.";
+    estimateResult.textContent = "--";
+    return;
+  }
+
+  weightError.textContent = "";
+
+  if (currentPricePerGram === 0) {
+    estimateResult.textContent = "Chargement...";
+    return;
+  }
+
+  const total = calculateEstimate(weight, currentPricePerGram);
+  estimateResult.textContent = total.toFixed(2);
 }
 
 
@@ -51,17 +92,12 @@ async function renderPrices() {
     responseState.textContent = "";
 
     const currentCurrency = currencySelect.value;
-
     const spotUrl = `https://xaus.com/api/v1/spot?currency=${currentCurrency}&unit=gram&compact=1`;
 
     const response = await fetch(spotUrl);
     if (!response.ok) {
-      if (response.status === 429) {
-        throw new Error("Le quota de requêtes a été dépassé.");
-      }
-      if (response.status >= 500) {
-        throw new Error("Le serveur rencontre un problème. Réessayez plus tard.");
-      }
+      if (response.status === 429) throw new Error("Le quota de requêtes a été dépassé.");
+      if (response.status >= 500) throw new Error("Le serveur rencontre un problème.");
       throw new Error("Erreur lors de la récupération des prix.");
     }
 
@@ -75,6 +111,12 @@ async function renderPrices() {
     const currentGoldPrice = spotData.xau.price;
     const fxRate = spotData.fx_rate || 1;
     const currentSilverPrice = (spotData.silver_usd_oz * fxRate) / 31.1034768;
+
+    latestPrices.gold = currentGoldPrice;
+    latestPrices.argent = currentSilverPrice;
+    latestPrices.currency = currentCurrency;
+
+    updateEstimate();
 
     const goldPercent = await getGoldVariationPercent();
     const silverPercent = await getSilverVariationPercent();
@@ -136,9 +178,12 @@ async function renderPrices() {
 }
 
 
-currencySelect.addEventListener("change", () => {
-  localStorage.setItem("selectedCurrency", currencySelect.value);  localStorage.setItem("selectedCurrency", currencySelect.value);
 
+weightInput.addEventListener("input", updateEstimate);
+metalSelect.addEventListener("change", updateEstimate);
+
+currencySelect.addEventListener("change", () => {
+  localStorage.setItem("selectedCurrency", currencySelect.value);
   renderPrices();
 });
 
