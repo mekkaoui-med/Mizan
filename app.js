@@ -2,9 +2,8 @@
 const dayTime = document.getElementById("date");
 const responseState = document.getElementById("responseState");
 const pricesContainer = document.querySelector(".prices");
+const currencySelect = document.getElementById("currency-select");
 
-// URLs des APIs
-const SPOT_URL = "https://xaus.com/api/v1/spot?currency=MAD&unit=gram&compact=1";
 const GOLD_HISTORY_URL = "https://xaus.com/api/v1/history";
 const SILVER_CHART_URL = "https://xaus.com/api/v1/chart?symbol=silver&range=1y&interval=1d";
 
@@ -23,7 +22,7 @@ function todayTime() {
 async function getGoldVariationPercent() {
   const response = await fetch(GOLD_HISTORY_URL);
   if (!response.ok) throw new Error("Erreur historique Or");
-  
+
   const data = await response.json();
   const points = data.points;
 
@@ -46,13 +45,16 @@ async function getSilverVariationPercent() {
   return ((latestPoint - previousPoint) / previousPoint) * 100;
 }
 
-//f u1-2
+
 async function renderPrices() {
   try {
     responseState.textContent = "";
 
-    
-    const response = await fetch(SPOT_URL);
+    const currentCurrency = currencySelect.value;
+
+    const spotUrl = `https://xaus.com/api/v1/spot?currency=${currentCurrency}&unit=gram&compact=1`;
+
+    const response = await fetch(spotUrl);
     if (!response.ok) {
       if (response.status === 429) {
         throw new Error("Le quota de requêtes a été dépassé.");
@@ -71,7 +73,8 @@ async function renderPrices() {
       spotData.price_as_of.split("T")[1].split(".")[0];
 
     const currentGoldPrice = spotData.xau.price;
-    const currentSilverPrice = (spotData.silver_usd_oz * spotData.fx_rate) / 31.1034768;
+    const fxRate = spotData.fx_rate || 1;
+    const currentSilverPrice = (spotData.silver_usd_oz * fxRate) / 31.1034768;
 
     const goldPercent = await getGoldVariationPercent();
     const silverPercent = await getSilverVariationPercent();
@@ -81,14 +84,14 @@ async function renderPrices() {
         name: "Or · 24 Carats",
         currentPrice: currentGoldPrice,
         diffPercent: goldPercent,
-        currency: "MAD / g",
+        currency: `${currentCurrency} / g`,
         lastUpdate: updateDate,
       },
       {
         name: "Argent · Pur",
         currentPrice: currentSilverPrice,
         diffPercent: silverPercent,
-        currency: "MAD / g",
+        currency: `${currentCurrency} / g`,
         lastUpdate: updateDate,
       },
     ];
@@ -96,8 +99,8 @@ async function renderPrices() {
     pricesContainer.innerHTML = "";
 
     metals.forEach((metal) => {
-      const previousPriceInMAD = metal.currentPrice / (1 + metal.diffPercent / 100);
-      const diffValueMAD = metal.currentPrice - previousPriceInMAD;
+      const previousPrice = metal.currentPrice / (1 + metal.diffPercent / 100);
+      const diffValue = metal.currentPrice - previousPrice;
 
       const isPositive = metal.diffPercent >= 0;
       const arrow = isPositive ? "↑" : "↓";
@@ -114,7 +117,7 @@ async function renderPrices() {
           <div class="goldVariation">
             <span class="${statusClass}">${arrow}</span>
             <span class="${statusClass}">
-              ${sign}${diffValueMAD.toFixed(2)} MAD (${sign}${metal.diffPercent.toFixed(2)} %)
+              ${sign}${diffValue.toFixed(2)} ${currentCurrency} (${sign}${metal.diffPercent.toFixed(2)} %)
             </span>
             par rapport à hier
           </div>
@@ -133,7 +136,17 @@ async function renderPrices() {
 }
 
 
+currencySelect.addEventListener("change", () => {
+  localStorage.setItem("selectedCurrency", currencySelect.value);  localStorage.setItem("selectedCurrency", currencySelect.value);
+
+  renderPrices();
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   todayTime();
+
+  const savedCurrency = localStorage.getItem("selectedCurrency") || "MAD";
+  currencySelect.value = savedCurrency;
+
   renderPrices();
 });

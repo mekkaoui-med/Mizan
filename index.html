@@ -29,22 +29,32 @@
           <h2 class="sectionTitle">Prix du Marcher</h2>
           <div class="prices"></div>
         </section>
-        <article>
-          <h2 class="estim-title">Estimateur de bijoues:</h2>
+        
+        <article class="estimator-section">
+          <h2 class="estim-title">Estimateur de bijoux</h2>
           <div id="estimate-container">
             <div>
               <input
                 type="number"
                 id="input-gold-argent"
-                placeholder="saisez un poids"
+                placeholder="Saisissez un poids (en g)"
+                step="any"
               />
+              <!-- Message d'erreur sous le champ -->
+              <p id="weight-error"></p>
             </div>
             <div id="slect-section">
               <select name="" id="select-metal">
-                <option value="gold">Or</option>
-                <option value="argent">Argent</option>
+                <option value="gold">Or (24 Carats)</option>
+                <option value="argent">Argent (Pur)</option>
               </select>
             </div>
+          </div>
+
+          <!-- Affichage du résultat de l'estimation -->
+          <div id="estimate-result-box">
+            Valeur estimée : <strong id="estimate-result">--</strong>
+            <span id="estimate-currency">MAD</span>
           </div>
         </article>
       </main>

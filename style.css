@@ -33,20 +33,20 @@ header {
   font-size: 15px;
   color: #4c4343;
 }
-.sectionTitle{
+.sectionTitle {
   font-size: 20px;
   margin-bottom: 18px;
 }
-.prices{
+.prices {
   display: grid;
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 18px;
 }
-.price-card{
+.price-card {
   background: rgb(241, 241, 160);
   border-radius: 5px;
 }
-.metal-name{
+.metal-name {
   text-align: center;
   text-decoration: underline;
   color: #535050;
@@ -55,69 +55,60 @@ header {
   margin-top: 5px;
   margin-left: 5px;
 }
-.price{
+.price {
   font-size: 30px;
   font-weight: bold;
-  margin:5px 10px ;
-
+  margin: 5px 10px;
 }
-#currency{
+#currency {
   font-size: 15px;
   font-weight: normal;
 }
 
-
-.goldVariation{
+.goldVariation {
   font-size: 15px;
   margin-left: 5px;
   font-weight: 600;
 }
-/* #variation-value-gold{
-  color: green;
-} */
-#variation-icon-gold{
+#variation-icon-gold {
   font-size: 30px;
 }
-.positive{
+.positive {
   color: green;
 }
-.negative{
+.negative {
   color: red;
 }
 
-
-
-
-#variation-icon-argent{
+#variation-icon-argent {
   font-size: 30px;
   color: red;
 }
-.variation-value-argent{
+.variation-value-argent {
   color: red;
-   
 }
-.hidden{
+.hidden {
   display: none;
 }
-#responseState{
+#responseState {
   color: red;
 }
 
-#refrechRespons{
+#refrechRespons {
   width: 15%;
   border-radius: 15px;
   border-color: #bcbc58;
   background-color: #bcbc58;
 }
 
-#refrechRespons:hover{
+#refrechRespons:hover {
   letter-spacing: 1px;
 }
-#responsePannel{
+#responsePannel {
   display: flex;
   justify-content: center;
 }
-#update{
+#update {
   margin: 10px;
 }
 #estimate-container {
@@ -142,7 +133,18 @@ header {
   background-color: white;
   cursor: pointer;
 }
-.estim-title{
+.estim-title {
   text-align: center;
   margin-top: 20px;
+}
+
+#weight-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+#estimate-result-box {
+  margin-top: 15px;
+  font-size: 1.1rem;
 }
